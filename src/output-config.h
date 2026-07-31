@@ -36,17 +36,19 @@ using AudioEncoderConfigPtr = std::shared_ptr<AudioEncoderConfig>;
 
 
 struct OutputTargetConfig {
-    std::string id;
-    std::string name;
-    std::string protocol;
-    bool syncStart = false;
-    bool syncStop = false;
+	std::string id;
+	std::string name;
+	std::string protocol;
+	bool syncStart = false;
+	bool syncStop = false;
 
-    nlohmann::json serviceParam;
-    nlohmann::json outputParam;
+	int delay_sec = 0; // Наша новая переменная для задержки
 
-    std::optional<std::string> videoConfig;
-    std::optional<std::string> audioConfig;
+	nlohmann::json serviceParam;
+	nlohmann::json outputParam;
+
+	std::optional<std::string> videoConfig;
+	std::optional<std::string> audioConfig;
 };
 using OutputTargetConfigPtr = std::shared_ptr<OutputTargetConfig>;
 

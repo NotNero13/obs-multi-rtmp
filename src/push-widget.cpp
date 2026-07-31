@@ -612,22 +612,23 @@ public:
             output_ = obs_output_create(output_id, "multi-output", output_settings, nullptr);
             SetMeAsHandler(output_);
         }
-
         if (output_) {
             isUseDelay_ = false;
 
-            auto profileConfig = obs_frontend_get_profile_config();
-            if (profileConfig) {
-                bool useDelay = config_get_bool(profileConfig, "Output", "DelayEnable");
-                bool preserveDelay = config_get_bool(profileConfig, "Output", "DelayPreserve");
-                int delaySec = config_get_int(profileConfig, "Output", "DelaySec");
-                obs_output_set_delay(output_,
-                    useDelay ? delaySec : 0,
-                    preserveDelay ? OBS_OUTPUT_DELAY_PRESERVE : 0
-                );
-
-                if (useDelay && delaySec > 0)
-                    isUseDelay_ = true;
+            // Новая логика: берем задержку из индивидуальных настроек таргета (config_)
+            // Мы добавим переменную delay_sec в конфигурацию на следующем шаге
+            int delaySec = config_->delay_sec; 
+            
+            if (delaySec > 0) {
+                // Применяем уникальную задержку
+                obs_output_set_delay(output_, delaySec, OBS_OUTPUT_DELAY_PRESERVE);
+                isUseDelay_ = true;
+            } else {
+                // Задержка отключена
+                obs_output_set_delay(output_, 0, 0);
+            }
+        }
+        }
             }
         }
 

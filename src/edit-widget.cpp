@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <qevent.h>
 #include <QComboBox>
+#include <QSpinBox> // Добавили QSpinBox для поля задержки
 
 #include <regex>
 
@@ -244,6 +245,8 @@ class EditOutputWidgetImpl: public EditOutputWidget
 
     QCheckBox* syncStart_ = 0;
     QCheckBox *syncStop_ = 0;
+
+    QSpinBox *delay_sec_ = 0;
 
     std::vector<std::string> EnumEncodersByCodec(const char* codec)
     {
@@ -513,6 +516,9 @@ public:
             sublayout->addWidget(name_ = new QLineEdit("", container_), 0, 1);
             sublayout->addWidget(new QLabel(obs_module_text("Protocol"), container_), 1, 0);
             sublayout->addWidget(protocolSelector_ = new QComboBox(container_), 1, 1);
+            sublayout->addWidget(new QLabel(u8"Задержка потока (сек)", container_), 2, 0);
+            sublayout->addWidget(delay_sec_ = new QSpinBox(container_), 2, 1);
+            delay_sec_->setRange(0, 3600); // Позволяем вводить от 0 до 3600 секунд (1 час)
             layout->addLayout(sublayout);
         }
         ++currow;
@@ -958,6 +964,7 @@ public:
         config_->protocol = tostdu8(protocolSelector_->itemData(protocolSelector_->currentIndex()).toString());
         config_->syncStart = syncStart_->isChecked();
         config_->syncStop = syncStop_->isChecked();
+        config_->delay_sec = delay_sec_->value();
         config_->outputParam = outputSettings_->Save();
         config_->serviceParam = serviceSettings_->Save();
 
@@ -999,6 +1006,7 @@ public:
         protocolSelector_->setCurrentIndex(protocolIndex);
         syncStart_->setChecked(target.syncStart);
         syncStop_->setChecked(target.syncStop);
+        delay_sec_->setValue(target.delay_sec); // Устанавливаем значение в поле
     }
 
     using IdOrVideoConfig = std::variant<std::string_view, VideoEncoderConfig*>;
