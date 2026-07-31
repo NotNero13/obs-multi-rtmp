@@ -27,7 +27,9 @@ static nlohmann::json SaveTarget(OutputTargetConfig& config) {
     json["output-param"] = config.outputParam;
     json["sync-start"] = config.syncStart;
     json["sync-stop"] = config.syncStop;
+    
     json["delay-sec"] = config.delay_sec;
+    
     if (config.videoConfig.has_value())
         json["video-config"] = *config.videoConfig;
     if (config.audioConfig.has_value())
