@@ -18,23 +18,22 @@ MultiOutputConfig& GlobalMultiOutputConfig()
 }
 
 
-static nlohmann::json SaveTarget(OutputTargetConfig &config)
-{
-	nlohmann::json json;
-	json["id"] = config.id;
-	json["name"] = config.name;
-	json["protocol"] = config.protocol;
-	json["service-param"] = config.serviceParam;
-	json["output-param"] = config.outputParam;
-	json["sync-start"] = config.syncStart;
-	json["sync-stop"] = config.syncStop;
-
-	json["delay-sec"] = config.delay_sec; // Сохраняем задержку
-
-	if (config.videoConfig.has_value())
-		json["video-config"] = *config.videoConfig;
-	// ...
-
+static nlohmann::json SaveTarget(OutputTargetConfig& config) {
+    nlohmann::json json;
+    json["id"] = config.id;
+    json["name"] = config.name;
+    json["protocol"] = config.protocol;
+    json["service-param"] = config.serviceParam;
+    json["output-param"] = config.outputParam;
+    json["sync-start"] = config.syncStart;
+    json["sync-stop"] = config.syncStop;
+    json["delay-sec"] = config.delay_sec;
+    if (config.videoConfig.has_value())
+        json["video-config"] = *config.videoConfig;
+    if (config.audioConfig.has_value())
+        json["audio-config"] = *config.audioConfig;
+    return json;
+}
 static nlohmann::json SaveVideoConfig(VideoEncoderConfig& config) {
     nlohmann::json json;
     json["id"] = config.id;
