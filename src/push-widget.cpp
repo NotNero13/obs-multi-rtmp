@@ -588,7 +588,7 @@ public:
     }
 
 
-    void StartStreaming() override {
+void StartStreaming() override {
         if (IsRunning())
             return;
 
@@ -612,21 +612,17 @@ public:
             output_ = obs_output_create(output_id, "multi-output", output_settings, nullptr);
             SetMeAsHandler(output_);
         }
-       if (output_) {
+
+        if (output_) {
             isUseDelay_ = false;
 
-            int delaySec = config_->delay_sec; 
-            
+            int delaySec = config_->delay_sec;
+
             if (delaySec > 0) {
                 obs_output_set_delay(output_, delaySec, OBS_OUTPUT_DELAY_PRESERVE);
                 isUseDelay_ = true;
             } else {
                 obs_output_set_delay(output_, 0, 0);
-            }
-        }
-            }
-        }
-        }
             }
         }
 
